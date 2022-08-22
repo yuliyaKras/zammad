@@ -2676,6 +2676,30 @@ RSpec.describe 'Ticket zoom', type: :system do
     end
   end
 
+  describe 'Copying ticket number' do
+    let(:ticket) { create(:ticket, group: Group.find_by(name: 'Users')) }
+    let(:ticket_number_copy_element) { 'span.ticket-number-copy svg.ticketNumberCopy-icon' }
+    let(:expected_clipboard_content) { (Setting.get('ticket_hook') + ticket.number).to_s }
+    let(:field)                      { find(:richtext) }
+
+    before do
+      visit "#ticket/zoom/#{ticket.id}"
+    end
+
+    it 'copies the ticket number correctly' do
+      find(ticket_number_copy_element).click
+
+      # simulate a paste action
+      within(:active_content) do
+        field.send_keys('')
+        field.click
+        field.send_keys([magic_key, 'v'])
+      end
+
+      expect(field.text).to eq(expected_clipboard_content)
+    end
+  end
+
   describe 'Allow additional usage of Ticket Number in (Zoom) URL #849' do
     let(:ticket) { create(:ticket, group: Group.find_by(name: 'Users')) }
 
@@ -2705,30 +2729,6 @@ RSpec.describe 'Ticket zoom', type: :system do
       click '.js-ArticleAction[data-type=internal]'
       click '.js-ArticleAction[data-type=public]'
       expect(page).to have_css('.js-ArticleAction[data-type=emailReply]')
-    end
-  end
-
-  describe 'Copying ticket number' do
-    let(:ticket) { create(:ticket, group: Group.find_by(name: 'Users')) }
-    let(:ticket_number_copy_element) { 'div.ticketZoom-header div.js-ticketMetaContainer span.ticket-number-copy' }
-    let(:expected_clipboard_content) { (Setting.get('ticket_hook') + ticket.number).to_s }
-    let(:field)                      { find(:richtext) }
-
-    before do
-      visit "#ticket/zoom/#{ticket.id}"
-    end
-
-    it 'copies the ticket number correctly' do
-      find(ticket_number_copy_element).click
-
-      # simulate a paste action
-      within(:active_content) do
-        field.send_keys('')
-        field.click
-        field.send_keys([magic_key, 'v'])
-      end
-
-      expect(field.text).to eq(expected_clipboard_content)
     end
   end
 end
