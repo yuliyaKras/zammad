@@ -933,9 +933,10 @@ perform changes on ticket
       end
     end
 
+    objects              = build_notification_template_objects(article)
     perform_notification = {}
-    perform_article = {}
-    changed = false
+    perform_article      = {}
+    changed              = false
     perform.each do |key, value|
       (object_name, attribute) = key.split('.', 2)
       raise "Unable to update object #{object_name}.#{attribute}, only can update tickets, send notifications and create articles!" if object_name != 'ticket' && object_name != 'article' && object_name != 'notification'
@@ -1012,6 +1013,14 @@ perform changes on ticket
 
       changed = true
 
+      if value['value'].is_a?(String)
+        value['value'] = NotificationFactory::Mailer.template(
+          templateInline: value['value'],
+          objects:        objects,
+          quote:          true,
+        )
+      end
+
       self[attribute] = value['value']
       logger.debug { "set #{object_name}.#{attribute} = #{value['value'].inspect} for ticket_id #{id}" }
     end
@@ -1019,8 +1028,6 @@ perform changes on ticket
     if changed
       save!
     end
-
-    objects = build_notification_template_objects(article)
 
     perform_article.each do |key, value|
       raise __("Article could not be created. An unsupported key other than 'article.note' was provided.") if key != 'article.note'
