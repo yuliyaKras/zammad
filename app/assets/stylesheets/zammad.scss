@@ -17,6 +17,8 @@ $navigationWidth: 260px;
 $mobileNavigationWidth: 50px;
 $mobileNavigationWidthOpen: 220px;
 $highlight-color: hsl(205, 90%, 60%);
+$background-modifier-lighter: hsla(0, 0%, 100%, 0.06);
+$background-modifier-accent: hsla(0, 0%, 0%, 0.04);
 
 @mixin desktop {
   @media screen and (min-width: 1260px) {
@@ -11406,10 +11408,10 @@ output {
     // background: 1px gap on the right towards the days + 1px border
     background: linear-gradient(
       to right,
-      var(--background-modifier-lighter),
-      var(--background-modifier-lighter) calc(100% - 2px),
+      $background-modifier-lighter,
+      $background-modifier-lighter calc(100% - 2px),
       transparent calc(100% - 2px),
-      var(--background-modifier-accent) calc(100% - 1px),
+      $background-modifier-accent calc(100% - 1px),
       transparent calc(100% - 1px)
     );
     padding: 0 5px 0 3px !important;
