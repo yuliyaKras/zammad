@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><defs>
         <path d="M10 1h2V0h12v31H0V0h10v1Z" id="icon-file-archive-a"/>
-    
+
         <path id="icon-file-calendar-a" d="M0 0h24v22H0z"/>
         <path id="icon-file-calendar-c" d="M0 0h24v9H0z"/>
     </defs><symbol id="icon-archived-modifier" viewBox="0 0 9 9">
@@ -158,7 +158,7 @@
     <path d="M1.805 1A.794.794 0 0 0 1 1.805v13.39c0 .503.403.805.805.805h7.249v-5.839H7.04V7.846h2.014V6.134c0-1.913 1.208-3.02 2.92-3.02.805 0 1.51.1 1.71.1v2.014h-1.207c-.907 0-1.108.403-1.108 1.108v1.409h2.215l-.302 2.315h-1.913V16h3.826a.794.794 0 0 0 .805-.806V1.704c0-.301-.403-.704-.805-.704H1.805Z" fill-rule="evenodd"/>
 </symbol><symbol id="icon-file-archive" viewBox="0 0 24 31">
     <title>file-archive</title>
-    
+
     <g fill="none" fill-rule="evenodd">
         <mask id="icon-file-archive-b" fill="#fff">
             <use xlink:href="#icon-file-archive-a"/>
@@ -171,7 +171,7 @@
     </g>
 </symbol><symbol id="icon-file-calendar" viewBox="0 0 24 31">
     <title>file-calendar</title>
-    
+
     <g fill="none" fill-rule="evenodd">
         <g transform="translate(0 9)">
             <mask id="icon-file-calendar-b" fill="#fff">
@@ -598,6 +598,9 @@
 </symbol><symbol id="icon-report" viewBox="0 0 20 20">
     <title>report</title>
     <path d="M0 6h5v14H0V6Zm7-6h6v20H7V0Zm8 13h5v7h-5v-7Z" fill-rule="evenodd"/>
+</symbol>
+</symbol><symbol id="icon-rss" viewBox="0 0 16 16">
+    <path d="M3.3 14c-.7 0-1.3-.6-1.3-1.3s.6-1.3 1.3-1.3 1.3.6 1.3 1.3S4.1 14 3.3 14zm8.7 0h2C14 7.4 8.6 2 2 2v2c5.5 0 10 4.5 10 10zm-4.5 0h2c0-4.2-3.4-7.5-7.5-7.5v2c3.1 0 5.5 2.4 5.5 5.5z"/>
 </symbol><symbol id="icon-search" viewBox="0 0 24 24">
     <title>search</title>
     <path d="M10.472 16.945a6.451 6.451 0 0 0 3.763-1.212l3.99 3.99a.96.96 0 0 0 .69.277c.546 0 .934-.42.934-.96a.914.914 0 0 0-.27-.673l-3.964-3.973a6.446 6.446 0 0 0 1.33-3.922c0-3.56-2.912-6.472-6.473-6.472C6.921 4 4 6.904 4 10.472c0 3.56 2.912 6.473 6.472 6.473Zm0-1.397c-2.777 0-5.075-2.298-5.075-5.076 0-2.777 2.298-5.075 5.075-5.075 2.778 0 5.076 2.298 5.076 5.075 0 2.778-2.298 5.076-5.076 5.076Z" fill-rule="evenodd"/>

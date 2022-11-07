@@ -564,6 +564,11 @@
         "url": "",
         "license": "MIT"
     },
+    "rss.svg": {
+        "author": "Zammad",
+        "url": "",
+        "license": "MIT"
+    },
     "searchdetail.svg": {
         "author": "Felix Niklas",
         "url": "",
