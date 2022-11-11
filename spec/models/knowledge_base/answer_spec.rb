@@ -70,7 +70,7 @@ RSpec.describe KnowledgeBase::Answer, type: :model, current_user_id: 1 do
   end
 
   describe '#sorted_by_published' do
-    it 'sorts by publishing or update date, whichever is greater' do
+    it 'sorts by publishing or update date, whichever is greater' do # rubocop:disable RSpec/ExampleLength
       described_class.destroy_all
 
       answer1 = create(:knowledge_base_answer, published_at: 1.day.ago)
@@ -85,7 +85,7 @@ RSpec.describe KnowledgeBase::Answer, type: :model, current_user_id: 1 do
   end
 
   describe '#sorted_by_internally_published' do
-    it 'sorts by internally publishing or update date, whichever is greater' do
+    it 'sorts by internally publishing or update date, whichever is greater' do # rubocop:disable RSpec/ExampleLength
       described_class.destroy_all
 
       answer1 = create(:knowledge_base_answer, internal_at: 2.days.ago, published_at: 1.day.ago)
