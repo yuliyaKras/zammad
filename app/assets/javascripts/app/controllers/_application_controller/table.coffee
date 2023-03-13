@@ -562,6 +562,8 @@ class App.ControllerTable extends App.Controller
     )
 
   renderTableRow: (object, position, actions) =>
+    if object.article_ids
+      object.article_ids = object.article_ids.join('\n\n')
     App.view('generic/table_row')(
       headers:    @headers
       attributes: @attributesList

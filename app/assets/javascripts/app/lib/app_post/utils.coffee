@@ -1536,3 +1536,15 @@ class App.Utils
       return 'image/jpeg'
 
     return 'image/png'
+
+  # add <br>. In article body: first string without <div>. For ticket-overview we need from html right update
+  @addFirstBr: (html) ->
+    return html if !html
+    num=html.indexOf("<div>",0)
+    if num < 1
+      return html
+    numEnd=html.indexOf("</div>",0)
+    if numEnd == num + 5
+      return html
+    text=html.substr(0, num).concat("<br>".concat(html.substr(num, html.length)))
+    return text

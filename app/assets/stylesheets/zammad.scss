@@ -14060,3 +14060,8 @@ span.is-disabled {
     padding-right: 4px;
   }
 }
+
+.table td.article_ids:not(.noTruncate) {
+  white-space: pre-line ;
+  display: flex;
+}
