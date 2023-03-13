@@ -406,4 +406,4 @@ class App.Ticket extends App.Model
     return '' if !article.body
     return article.body if article.content_type.blank?
     body = App.Utils.addFirstBr(article.body)
-    return App.Utils.html2text(body, true)
+    return App.Utils.html2text(body, false)
