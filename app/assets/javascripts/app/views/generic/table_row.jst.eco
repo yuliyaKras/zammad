@@ -73,7 +73,7 @@
         <span <% if header.class: %>class="<%= header.class %>"<% end %> <% if header.data: %><% for data_key, data_header of header.data: %>data-<%- data_key %>="<%= data_header %>" <% end %><% end %>>
         <% end %>
         <%- value %>
-        <% if header.class || header.data | header.name is 'article_ids': %></span><% end %>
+        <% if header.class || header.data || header.name is 'article_ids': %></span><% end %>
       <% end %>
       <% if header.link: %></a><% end %>
     <% end %>
