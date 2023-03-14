@@ -442,7 +442,7 @@ class Table extends App.Controller
     )
 
     @renderPopovers()
-
+  
   render: (data) =>
     return if !data
 
@@ -458,8 +458,25 @@ class Table extends App.Controller
 
     # get ticket list
     ticketListShow = []
-    for ticket in tickets
-      ticketListShow.push App.Ticket.find(ticket.id)
+    for ticket in tickets 
+      t = App.Ticket.find(ticket.id)
+      for article_id in t.article_ids
+        if _.isNumber(article_id)
+          App.Ajax.request(
+            type:  'GET'
+            url:   "#{@apiPath}/ticket_articles/" + article_id
+            processData: true,
+            success: (data, status, xhr) => 
+              # full / load assets
+              #App.TicketArticle.refresh(data)
+              tick=App.Ticket.find(data.ticket_id)
+              index = tick.article_ids.indexOf(data.id)
+              console.log(index)
+              tick.article_ids[index]=data.body
+              App.Ticket.refresh(tick)
+              console.log(tick)              
+          )
+      ticketListShow.push t
 
     # if customer and no ticket exists, show the following message only
     return if @renderCustomerNotTicketExistIfNeeded(ticketListShow)
