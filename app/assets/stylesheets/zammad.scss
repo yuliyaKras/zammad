@@ -14061,7 +14061,6 @@ span.is-disabled {
   }
 }
 
-.table td.article_ids:not(.noTruncate) {
-  white-space: pre-line ;
-  display: flex;
+.table td.article_ids:not(.noTruncate) span {
+  white-space: pre-line;
 }

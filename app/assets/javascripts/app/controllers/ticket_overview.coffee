@@ -455,7 +455,7 @@ class Table extends App.Controller
           success: (data, status, xhr) => 
             tick=App.Ticket.find(data.ticket_id)
             index = tick.article_ids.indexOf(data.id)
-            tick.article_ids[index]=App.i18n.translateInline('from') + ' ' + data.from + ': \n' + @body_as_text(data)
+            tick.article_ids[index]=App.i18n.translateInline('from') + ' ' + data.from + ' ' + App.i18n.convert(data.updated_at, 0, 'dd-mm-yyyy HH:MM') + ': \n' + @body_as_text(data)
             App.Ticket.refresh(tick)     
         )
     return t
