@@ -463,8 +463,7 @@ class Table extends App.Controller
   body_as_text: (article) =>
     return '' if !article.body
     return article.body if article.content_type.blank?
-    body = App.Utils.addFirstBr(article.body)
-    return App.Utils.html2text(body, false)
+    body = App.Utils.addFirstBrDoHtml2text(article.body)
 
   render: (data) =>
     return if !data
