@@ -27,7 +27,7 @@ class App.Ticket extends App.Model
       { name: 'created_at',               display: __('Created at'),   tag: 'datetime', width: '110px', align: 'right', readonly: 1 },
       { name: 'updated_by_id',            display: __('Updated by'),   relation: 'User', readonly: 1 },
       { name: 'updated_at',               display: __('Updated at'),   tag: 'datetime', width: '110px', align: 'right', readonly: 1 },
-      { name: 'article_ids',              display: __('Article bodies'), tag: 'input', align: 'left', readonly: 1, width: '70%' },
+      { name: 'article_ids',              display: __('Article bodies'), tag: 'input', align: 'left', readonly: 1, width: '50%' },
     ]
 
   uiUrl: ->
@@ -387,23 +387,4 @@ class App.Ticket extends App.Model
     if @shared_draft_id
       attrs.shared_draft_id = @shared_draft_id
 
-    attrs
-
-  @_fillUp: (data) ->
-    super
-    if data['article_ids']
-      _.uniq(data['article_ids'])
-      i = -1
-      for article_id in data['article_ids'] 
-        i++       
-        if App.TicketArticle.exists(article_id)
-          article = App.TicketArticle.findNative(article_id) 
-          data['article_ids'][i] = App.i18n.translateInline('from') + ' ' + article.from + ': \n' + @body_as_text(article)
-          
-    data
-
-  @body_as_text: (article) ->
-    return '' if !article.body
-    return article.body if article.content_type.blank?
-    body = App.Utils.addFirstBr(article.body)
-    return App.Utils.html2text(body, false)
+    attrs  
