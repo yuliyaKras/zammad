@@ -459,7 +459,7 @@ class Table extends App.Controller
     # get ticket list
     ticketListShow = []
     for ticket in tickets
-      ticketListShow.push App.Ticket.find(ticket.id)
+      ticketListShow.push App.Ticket.find(ticket.id)      
 
     # if customer and no ticket exists, show the following message only
     return if @renderCustomerNotTicketExistIfNeeded(ticketListShow)
@@ -519,7 +519,6 @@ class Table extends App.Controller
         # open ticket via task manager to provide task with overview info
         ticket = App.Ticket.findNative(id)
         return if !ticket
-
         App.TaskManager.execute(
           key:        "Ticket-#{ticket.id}"
           controller: 'TicketZoom'
@@ -527,7 +526,9 @@ class Table extends App.Controller
             ticket_id:   ticket.id
             overview_id: @overview.id
           show:       true
+          #events: 'click .js-table-body item': '.js-table-body.addClass("danger")'
         )
+        
         @navigate ticket.uiUrl()
 
       callbackTicketTitleAdd = (value, object, attribute, attributes) ->
@@ -686,7 +687,7 @@ class Table extends App.Controller
 
       @table = new App.ControllerTable(tableArguments)
 
-    @renderPopovers()
+    @renderPopovers()    
 
     @bulkForm.releaseController() if @bulkForm
     @bulkForm = new App.TicketBulkForm(
@@ -727,6 +728,12 @@ class Table extends App.Controller
           bulkAll.prop('checked', false)
           bulkAll.prop('indeterminate', true)
     )
+
+    for ticket in ticketListShow      
+      @ticketWatcher = new App.TicketWatcher(
+        ticket: ticket
+        elWatcher: localElement
+      )
 
   convertOverviewAttributesToArray: (overviewAttributes) ->
     # Ensure that the given attributes for the overview is an array,
@@ -926,6 +933,72 @@ class TicketOverviewRouter extends App.ControllerPermanent
       show:       true
       persistent: true
     )
+
+###class TicketObserver extends App.ControllerObserver
+  events:
+    'click .js-table-body item': 'ticketGreen'
+
+  ticketGreen: (e) ->
+    e.addClass('danger')###
+  
+    
+class App.TicketWatcher extends App.Controller
+  constructor: ->
+    super
+    #@subscribeId = App.TaskManager.preferencesSubscribe(@taskKey, @render)
+    #App.TaskManager.preferencesTrigger(@taskKey)
+    ticketKey = 'Ticket-' + @ticket.id
+    
+    @subscribeId = App.TaskManager.preferencesSubscribe(ticketKey, @render)
+    App.TaskManager.preferencesTrigger(ticketKey)
+
+  release: =>
+      if @subscribeId
+        App.TaskManager.preferencesUnsubscribe(@subscribeId)
+  
+  render: (preferences) =>
+    console.log(preferences)  
+    ###if @ticket.updated_at
+      diff = new Date().getTime() - new Date(@ticket.updated_at).getTime()      
+      if diff < 300000 
+        new App.TicketOverviewObserver(
+          ticket_id: ticket_id
+          elWatcher: @elWatcher
+        )###
+    #if preferences.tasks
+    currentUserId = App.Session.get('id')
+    for watcher in preferences.tasks
+      #console.log(watcher)
+      if watcher.last_contact
+        @elWatcher.find('.table .item[data-id=' + "#{@ticket.id}" +']').removeClass('danger')
+        diff = new Date().getTime() - new Date(watcher.last_contact).getTime()
+        if diff < 300000
+          if watcher.user_id != currentUserId
+            @elWatcher.find('.table .item[data-id=' + "#{@ticket.id}" +']').addClass('danger')          
+            break               
+    new App.TicketOverviewObserver(
+        ticket: @ticket
+        elWatcher: @elWatcher
+      )
+  start: =>
+    @intervalId = @interval(
+      =>
+        App.TaskManager.preferencesTrigger(@taskKey)
+      5 * 60000
+      'ticket-watcher-interval'
+    )
+
+  stop: =>
+    return if !@intervalId
+    @clearInterval(@intervalId)
+  
+class App.TicketOverviewObserver extends App.ControllerObserver
+  model: 'Ticket'
+  observe:
+    customer_id: true
+
+  render: (ticket) =>
+    console.log(ticket)    
 
 App.Config.set('ticket/view', TicketOverviewRouter, 'Routes')
 App.Config.set('ticket/view/:view', TicketOverviewRouter, 'Routes')
