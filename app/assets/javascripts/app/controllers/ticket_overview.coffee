@@ -933,20 +933,10 @@ class TicketOverviewRouter extends App.ControllerPermanent
       show:       true
       persistent: true
     )
-
-###class TicketObserver extends App.ControllerObserver
-  events:
-    'click .js-table-body item': 'ticketGreen'
-
-  ticketGreen: (e) ->
-    e.addClass('danger')###
-  
     
 class App.TicketWatcher extends App.Controller
   constructor: ->
     super
-    #@subscribeId = App.TaskManager.preferencesSubscribe(@taskKey, @render)
-    #App.TaskManager.preferencesTrigger(@taskKey)
     ticketKey = 'Ticket-' + @ticket.id
     
     @subscribeId = App.TaskManager.preferencesSubscribe(ticketKey, @render)
@@ -957,48 +947,37 @@ class App.TicketWatcher extends App.Controller
         App.TaskManager.preferencesUnsubscribe(@subscribeId)
   
   render: (preferences) =>
-    console.log(preferences)  
-    ###if @ticket.updated_at
-      diff = new Date().getTime() - new Date(@ticket.updated_at).getTime()      
-      if diff < 300000 
-        new App.TicketOverviewObserver(
-          ticket_id: ticket_id
-          elWatcher: @elWatcher
-        )###
-    #if preferences.tasks
-    currentUserId = App.Session.get('id')
-    for watcher in preferences.tasks
-      #console.log(watcher)
-      if watcher.last_contact
-        @elWatcher.find('.table .item[data-id=' + "#{@ticket.id}" +']').removeClass('danger')
-        diff = new Date().getTime() - new Date(watcher.last_contact).getTime()
-        if diff < 300000
-          if watcher.user_id != currentUserId
-            @elWatcher.find('.table .item[data-id=' + "#{@ticket.id}" +']').addClass('danger')          
-            break               
-    new App.TicketOverviewObserver(
-        ticket: @ticket
-        elWatcher: @elWatcher
-      )
+     
+    if preferences.tasks
+      currentUserId = App.Session.get('id')
+      for watcher in preferences.tasks
+        if watcher.last_contact
+          @elWatcher.find('.table .item[data-id=' + "#{@ticket.id}" +']').removeClass('ticket-in-progress')
+          diff = new Date().getTime() - new Date(watcher.last_contact).getTime()
+          if diff < 300000
+            if watcher.user_id != currentUserId
+              @elWatcher.find('.table .item[data-id=' + "#{@ticket.id}" +']').addClass('ticket-in-progress')          
+              break               
+    new App.ControllerObserver(
+          object_id: @ticket.id
+          template: 'version'
+          observe: {
+            title: true,
+            preferences: true,
+          },
+        )
   start: =>
     @intervalId = @interval(
       =>
         App.TaskManager.preferencesTrigger(@taskKey)
       5 * 60000
-      'ticket-watcher-interval'
+      'ticket-watcher-interval-2'
     )
 
   stop: =>
     return if !@intervalId
-    @clearInterval(@intervalId)
-  
-class App.TicketOverviewObserver extends App.ControllerObserver
-  model: 'Ticket'
-  observe:
-    customer_id: true
+    @clearInterval(@intervalId)  
 
-  render: (ticket) =>
-    console.log(ticket)    
 
 App.Config.set('ticket/view', TicketOverviewRouter, 'Routes')
 App.Config.set('ticket/view/:view', TicketOverviewRouter, 'Routes')
