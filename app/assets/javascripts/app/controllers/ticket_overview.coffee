@@ -728,7 +728,7 @@ class Table extends App.Controller
           bulkAll.prop('checked', false)
           bulkAll.prop('indeterminate', true)
     )
-    
+    # open ticket observe in overview
     for ticket in ticketListShow      
       @ticketWatcher = new App.TicketWatcher(
         ticket: ticket
@@ -950,12 +950,15 @@ class App.TicketWatcher extends App.Controller
      
     if preferences.tasks
       currentUserId = App.Session.get('id')
+      current_user_arr =  _.filter preferences.tasks, (watcher) -> watcher.user_id == currentUserId
+      current_user_last_contact = current_user_arr[0].last_contact
+      
       for watcher in preferences.tasks
         if watcher.last_contact
           @elWatcher.find('.table .item[data-id=' + "#{@ticket.id}" +']').removeClass('ticket-in-progress')
           diff = new Date().getTime() - new Date(watcher.last_contact).getTime()
           if diff < 300000
-            if watcher.user_id != currentUserId
+            if watcher.user_id != currentUserId && current_user_last_contact < watcher.last_contact
               @elWatcher.find('.table .item[data-id=' + "#{@ticket.id}" +']').addClass('ticket-in-progress')          
               break               
     new App.ControllerObserver(
