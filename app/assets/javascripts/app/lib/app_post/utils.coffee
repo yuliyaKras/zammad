@@ -1536,3 +1536,22 @@ class App.Utils
       return 'image/jpeg'
 
     return 'image/png'
+
+  # add <br>. In article body: first string without <div>. For ticket-overview we need from html right update
+  @addFirstBrDoHtml2text: (html) ->
+    return html if !html
+    num=html.indexOf("<div>",0)
+    if num > 0      
+      numEnd=html.indexOf("</div>",0)
+      if numEnd != num + 5
+        html=html.substr(0, num).concat("<br>".concat(html.substr(num, html.length)))
+    # trim and cleanup
+    html = html
+      .replace(/<(br|hr)>/g, "\n")
+      .replace(/<(br|hr)\/>/g, "\n")
+      .replace(/<(div)(|.+?)>/g, "")
+      .replace(/<(p|blockquote|form|textarea|address|tr)(|.+?)>/g, "\n")
+      .replace(/<\/(div|p|blockquote|form|textarea|address|tr)>/g, "\n")
+    $('<div>' + html + '</div>').text().trim()
+      .replace(/\n{3,20}/g, "\n\n")   # remove multiple empty lines
+  

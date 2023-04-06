@@ -27,6 +27,7 @@ class App.Ticket extends App.Model
       { name: 'created_at',               display: __('Created at'),   tag: 'datetime', width: '110px', align: 'right', readonly: 1 },
       { name: 'updated_by_id',            display: __('Updated by'),   relation: 'User', readonly: 1 },
       { name: 'updated_at',               display: __('Updated at'),   tag: 'datetime', width: '110px', align: 'right', readonly: 1 },
+      { name: 'article_ids',              display: __('Article bodies'), tag: 'input', align: 'left', readonly: 1, width: '50%' },
     ]
 
   uiUrl: ->
@@ -386,4 +387,4 @@ class App.Ticket extends App.Model
     if @shared_draft_id
       attrs.shared_draft_id = @shared_draft_id
 
-    attrs
+    attrs  

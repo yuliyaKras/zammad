@@ -14061,6 +14061,14 @@ span.is-disabled {
   }
 }
 
+.table td.article_ids:not(.noTruncate) span {
+  white-space: pre-line;
+}
+
 .ticket-in-progress {
   background: var(--highlighter-green);
+}
+
+.ticket-in-progress:hover {
+  background: var(--highlighter-green) !important;
 }

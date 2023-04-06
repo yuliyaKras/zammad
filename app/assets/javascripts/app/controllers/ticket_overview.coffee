@@ -427,7 +427,8 @@ class Table extends App.Controller
     # get ticket list
     ticketListShow = []
     for ticket in tickets
-      ticketListShow.push App.Ticket.find(ticket.id)
+      t = @ticket_with_article(ticket)
+      ticketListShow.push t
     @overview = App.Overview.find(overview.id)
 
     @removePopovers()
@@ -442,6 +443,27 @@ class Table extends App.Controller
     )
 
     @renderPopovers()
+  
+  ticket_with_article: (ticket) =>
+    t = App.Ticket.find(ticket.id)
+    for article_id in t.article_ids
+      if _.isNumber(article_id)
+        App.Ajax.request(
+          type:  'GET'
+          url:   "#{@apiPath}/ticket_articles/" + article_id
+          processData: true,
+          success: (data, status, xhr) => 
+            tick=App.Ticket.find(data.ticket_id)
+            index = tick.article_ids.indexOf(data.id)
+            tick.article_ids[index]=App.i18n.translateInline('from') + ' ' + data.from + ' ' + App.i18n.convert(data.updated_at, 0, 'dd-mm-yyyy HH:MM') + ': \n' + @body_as_text(data)
+            App.Ticket.refresh(tick)     
+        )
+    return t
+
+  body_as_text: (article) =>
+    return '' if !article.body
+    return article.body if article.content_type.blank?
+    body = App.Utils.addFirstBrDoHtml2text(article.body)
 
   render: (data) =>
     return if !data
@@ -458,8 +480,9 @@ class Table extends App.Controller
 
     # get ticket list
     ticketListShow = []
-    for ticket in tickets
-      ticketListShow.push App.Ticket.find(ticket.id)      
+    for ticket in tickets 
+      t = @ticket_with_article(ticket)
+      ticketListShow.push t      
 
     # if customer and no ticket exists, show the following message only
     return if @renderCustomerNotTicketExistIfNeeded(ticketListShow)

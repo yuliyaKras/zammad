@@ -31,7 +31,7 @@
   <%     end %>
   <%   end %>
   <% end %>
-  <td<% if header.parentClass: %> class="<%= header.parentClass %>"<% end %><% if header.title: %> title="<%= header.title %>"<% end %><% if header.align: %> style="text-align:<%= header.align %>"<% end %>>
+  <td<% if header.parentClass: %> class="<%= header.parentClass %>"<% end %><% if header.title: %> title="<%= header.title %>"<% end %><% if header.align: %> style="text-align:<%= header.align %>"<% end %><% if header.name is 'article_ids': %>class="<%= header.name %>"<% end %>>
     <% if header.name is 'icon': %>
       <%- @Icon('task-state', header.class) %>
     <% else if header.icon: %>
@@ -69,11 +69,11 @@
         <% if header.prefixIcon: %>
           <span class="prefix-icon"><%- @Icon(header.prefixIcon) %></span>
         <% end %>
-        <% if header.class || header.data: %>
+        <% if header.class || header.data || header.name is 'article_ids': %>
         <span <% if header.class: %>class="<%= header.class %>"<% end %> <% if header.data: %><% for data_key, data_header of header.data: %>data-<%- data_key %>="<%= data_header %>" <% end %><% end %>>
         <% end %>
         <%- value %>
-        <% if header.class || header.data: %></span><% end %>
+        <% if header.class || header.data || header.name is 'article_ids': %></span><% end %>
       <% end %>
       <% if header.link: %></a><% end %>
     <% end %>
