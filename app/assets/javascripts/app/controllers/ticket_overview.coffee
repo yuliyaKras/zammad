@@ -728,7 +728,7 @@ class Table extends App.Controller
           bulkAll.prop('checked', false)
           bulkAll.prop('indeterminate', true)
     )
-
+    
     for ticket in ticketListShow      
       @ticketWatcher = new App.TicketWatcher(
         ticket: ticket
@@ -964,6 +964,7 @@ class App.TicketWatcher extends App.Controller
           observe: {
             title: true,
             preferences: true,
+            customer_id: true,
           },
         )
   start: =>
